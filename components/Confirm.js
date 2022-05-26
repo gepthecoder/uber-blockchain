@@ -1,4 +1,5 @@
 import React from 'react'
+import RideSelector from './RideSelector'
 
 const style = {
     wrapper: `flex-1 h-full flex flex-col justify-between`,
@@ -14,6 +15,7 @@ const Confirm = () => {
     return (
         <div className={style.wrapper}>
             <div className={style.rideSelectorContainer}>
+                <RideSelector />
             </div>
             <div className={style.confirmButtonContainer}>
                 <div className={style.confirmButtonContainer}>
