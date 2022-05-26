@@ -1,5 +1,6 @@
 import Navbar from "../components/Navbar"
 import Map from "../components/Map"
+import LocationSelector from "../components/LocationSelector"
 
 const style = {
   wrapper: `h-screen w-screen flex flex-col`,
@@ -18,7 +19,7 @@ export default function Home() {
     </div>
     <div className={style.rideRequestContainer}>
       <div className={style.rideRequest}>
-        {/* <LocationSelector /> */}
+        <LocationSelector />
         {/* <Confirm /> */}
       </div>
     </div>
