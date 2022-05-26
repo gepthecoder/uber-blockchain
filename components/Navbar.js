@@ -16,7 +16,7 @@ const style = {
 
 const currentAccount = '0xe276941FBd5f936E677dB9B6eEE8212a3b268C5E'
 
-export const Navbar = () => {
+const Navbar = () => {
 
   return (
     <div className={style.wrapper}>
@@ -53,3 +53,5 @@ export const Navbar = () => {
     </div>
   )
 }
+
+export default Navbar
