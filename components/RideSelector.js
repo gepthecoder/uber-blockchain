@@ -1,7 +1,9 @@
+import { useEffect, useContext, useState } from 'react'
 import Image from 'next/image'
 
 // Logos & Images
 import ethLogo from '../assets/eth-logo.png'
+
 import uberX from '../assets/rides/uberX.png'
 import uberBlack from '../assets/rides/uberBlack.png'
 import uberBlackSuv from '../assets/rides/uberBlackSuv.png'
@@ -22,69 +24,59 @@ const style = {
     price: `mr-[-0.8rem]`,
 }
 
-const carList = [
-    {
-        service: 'UberX',
-        iconUrl: uberX,
-        priceMultiplier: 1,
-    },
-    {
-        service: 'UberBlack',
-        iconUrl: uberBlack,
-        priceMultiplier: 1.5,
-    },
-    {
-        service: 'UberBlackSuv',
-        iconUrl: uberBlackSuv,
-        priceMultiplier: 1.5,
-    },
-    {
-        service: 'UberSelect',
-        iconUrl: uberSelect,
-        priceMultiplier: 1.5,
-    },
-    {
-        service: 'UberXL',
-        iconUrl: uberXL,
-        priceMultiplier: 1.5,
-    },
-]
 
 const basePrice = 1542 
 
 const RideSelector = () => {
-  return (
-    <div className={style.wrapper}>
-        <div className={style.title}>Choose a ride, or swipe up for more</div>
-        <div className={style.carList}>
-        {carList.map((car, index) => (
-            <div
-                key={index}
-                className={`${
-                    style.car
-                }`}
-            >
-                <Image
-                    src={car.iconUrl}
-                    className={style.carImage}
-                    height={50}
-                    width={50}
-                />
-            <div className={style.carDetails}>
-                <div className={style.service}>{car.service}</div>
-                <div className={style.time}>5 min away</div>
-            </div>
-            <div className={style.priceContainer}>
-                <div className={style.price}>
-                {((basePrice / 10 ** 5) * car.priceMultiplier).toFixed(5)}
+
+    const [carList, setCarList] = useState([])
+
+    useEffect(() => {
+        ;(async () => {
+          try {
+            //try get data
+            const response = await fetch('/api/db/getRideTypes')
+            // set data
+            const data = await response.json()
+            setCarList(data.data)
+          } catch (error) {
+            console.error(error)
+          }
+        })()
+      }, [])
+
+    return (
+        <div className={style.wrapper}>
+            <div className={style.title}>Choose a ride, or swipe up for more</div>
+            <div className={style.carList}>
+            {carList.map((car, index) => (
+                <div
+                    key={index}
+                    className={`${
+                        style.car
+                    }`}
+                >
+                    <Image
+                        src={car.iconUrl}
+                        className={style.carImage}
+                        height={50}
+                        width={50}
+                    />
+                <div className={style.carDetails}>
+                    <div className={style.service}>{car.service}</div>
+                    <div className={style.time}>5 min away</div>
                 </div>
-                <Image src={ethLogo} height={25} width={40} />
+                <div className={style.priceContainer}>
+                    <div className={style.price}>
+                    {((basePrice / 10 ** 5) * car.priceMultiplier).toFixed(5)}
+                    </div>
+                    <Image src={ethLogo} height={25} width={40} />
+                </div>
+                </div>
+            ))}
             </div>
-            </div>
-        ))}
         </div>
-    </div>
-  )
+    )
 }
 
 export default RideSelector
