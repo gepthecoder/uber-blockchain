@@ -35,7 +35,7 @@ const Navbar = () => {
 
         <div className={style.rightMenu}>
             <div className={style.menuItem}>Help</div>
-            <div className={style.menuItem}>{"G3P"}</div>
+            <div className={style.menuItem}>{currentUser.name?.split(' ')[0]}</div>
             <div className={style.userImageContainer}>
                 <Image
                     className={style.userImage}

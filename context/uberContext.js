@@ -12,6 +12,8 @@ export const UberProvider = ({children}) => {
 
     /* Metamask */
     const [currentAccount, setCurrentAccount] = useState()
+
+    /* Sanity User */
     const [currentUser, setCurrentUser] = useState([])
 
     let metamask
@@ -23,6 +25,12 @@ export const UberProvider = ({children}) => {
     useEffect(() => {
         checkIfWalletIsConnected()
     }, [])
+
+    useEffect(() => {
+        if (!currentAccount) return
+        requestToGetCurrentUsersInfo(currentAccount)
+    }, [currentAccount])
+    
 
     const checkIfWalletIsConnected = async () => {
         if (!window.ethereum) return
@@ -111,10 +119,20 @@ export const UberProvider = ({children}) => {
               name: faker.name.findName(),
             }),
           })
-        } catch (error) {
-          console.error(error)
-        }
+        } catch (error) { console.error(error) }
     }
+
+    const requestToGetCurrentUsersInfo = async walletAddress => {
+        try {
+          const response = await fetch(
+            `/api/db/getUserInfo?walletAddress=${walletAddress}`,
+          )
+    
+          const data = await response.json()
+          setCurrentUser(data.data)
+        } catch (error) { console.error(error) }
+    }
+    
 
     return (
         <UberContext.Provider
@@ -129,6 +147,7 @@ export const UberProvider = ({children}) => {
               setDropoffCoordinates,
               connectWallet,
               currentAccount,
+              currentUser,
           }}
         >
           {children}
