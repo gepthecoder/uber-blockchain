@@ -1,15 +1,57 @@
 import { createContext, useState, useEffect } from 'react'
+import { faker } from '@faker-js/faker'
 
 export const UberContext = createContext()
 
-
-
 export const UberProvider = ({children}) => {
+    /* Mapbox */
     const [pickup, setPickup] = useState('')
     const [dropoff, setDropoff] = useState('')
     const [pickupCoordinates, setPickupCoordinates] = useState()
     const [dropoffCoordinates, setDropoffCoordinates] = useState()
 
+    /* Metamask */
+    const [currentAccount, setCurrentAccount] = useState()
+    const [currentUser, setCurrentUser] = useState([])
+
+    let metamask
+
+    if (typeof window !== 'undefined') {
+      metamask = window.ethereum
+    }
+
+    useEffect(() => {
+        checkIfWalletIsConnected()
+    }, [])
+
+    const checkIfWalletIsConnected = async () => {
+        if (!window.ethereum) return
+        try {
+          const addressArray = await window.ethereum.request({
+            method: 'eth_accounts',
+          })
+    
+          if (addressArray.length > 0) {
+            setCurrentAccount(addressArray[0])
+            requestToCreateUserOnSanity(addressArray[0])
+          }
+        } catch (error) { console.error(error) }
+    }
+
+    const connectWallet = async () => {
+        if (!window.ethereum) return
+        try {
+          const addressArray = await window.ethereum.request({
+            method: 'eth_requestAccounts',
+          })
+    
+          if (addressArray.length > 0) {
+            setCurrentAccount(addressArray[0])
+            requestToCreateUserOnSanity(addressArray[0])
+          }
+        } catch (error) { console.error(error) }
+    }
+    
     const createLocationCoordinatePromise = (locationName, locationType) => {
         return new Promise(async (resolve, reject) => {
             try {
@@ -56,6 +98,24 @@ export const UberProvider = ({children}) => {
         } else return
     }, [pickup, dropoff])
 
+    const requestToCreateUserOnSanity = async address => {
+        if (!window.ethereum) return
+        try {
+          await fetch('/api/db/createUser', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              userWalletAddress: address,
+              name: faker.name.findName(),
+            }),
+          })
+        } catch (error) {
+          console.error(error)
+        }
+    }
+
     return (
         <UberContext.Provider
           value={{
@@ -67,6 +127,8 @@ export const UberProvider = ({children}) => {
               setPickupCoordinates,
               dropoffCoordinates,
               setDropoffCoordinates,
+              connectWallet,
+              currentAccount,
           }}
         >
           {children}
