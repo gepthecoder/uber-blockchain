@@ -4,6 +4,8 @@ const getLocationCoordinates = async (req, res) => {
     try {
       const response = await fetch(mapboxUrl)
       const data = await response.json()
+
+      console.log(data.features[0].center)
   
       res.status(200).send({ message: 'success', data: data.features[0].center })
     } catch (error) {
