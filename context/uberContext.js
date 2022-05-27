@@ -180,6 +180,7 @@ export const UberProvider = ({children}) => {
               setSelectedRide,
               setPrice,
               basePrice,
+              metamask,
           }}
         >
           {children}
