@@ -15,4 +15,5 @@ Uber Web 3.0 Blockchain App with Next.js | Ethers.js | Sanity.io | Tailwind CSS
 ![image](https://user-images.githubusercontent.com/38008294/170699487-c6544c09-1a32-4834-aa95-8fbea4d61ff5.png)
 #
 ![image](https://user-images.githubusercontent.com/38008294/170699552-e5043b93-d202-4724-ac01-ddae6d72a115.png)
-
+#
+# $vercel dev to start a local server
