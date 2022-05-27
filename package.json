@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@faker-js/faker": "^7.1.0",
     "@sanity/client": "^3.3.0",
     "mapbox-gl": "^2.8.2",
     "next": "12.1.6",
